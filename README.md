@@ -1,6 +1,6 @@
 # CompRight - Prowler 룰셋 생성기
 
-이 도구는 Apache-2.0 라이선스를 가진 Prowler와 연동되어 AWS 리소스의 규정 준수 상태를 점검하는 룰셋을 생성합니다.
+이 도구는 Apache-2.0 라이선스를 가진 [Prowler](https://github.com/prowler-cloud/prowler)와 연동되어 AWS 리소스의 규정 준수 상태를 점검하는 룰셋을 생성합니다.
 **https://yyyy7246.github.io/CustomRuleGenerator/**
 
 ## 개요
