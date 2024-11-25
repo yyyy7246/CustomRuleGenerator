@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompRight Prowler Ruleset Generator</title>
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+    <!-- 서비스 사이드바 추가 -->
+    <div class="service-sidebar" style="width: 206px;">
+        <div class="sidebar-header">
+            <h3>AWS Services</h3>
+        </div>
+        <nav class="service-nav">
+            <ul id="serviceList">
+                <!-- 서비스 목록이 동적으로 추가됩니다 -->
+            </ul>
+        </nav>
+    </div>
+    <div class="container py-4" style="padding-left: 40px;">
+        <h1 class="main-title" style="padding-left: 160px;">
+            <div class="title-wrapper">
+                <span class="highlight">CompRight</span>
+                <div class="title-underline"></div>
+            </div>
+            Prowler Ruleset Generator
+        </h1>
+
+        <!-- 필터 -->
+        <div class="row mb-4">
+            <!-- 법 선택 -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">법 선택</label>
+                    <div class="border p-3 bg-white rounded" style="max-height: 300px; overflow-y: auto;">
+                        <form id="lawFilterForm">
+                            <div id="lawFilterContainer">
+                                <!-- 체크박스가 동적으로 추가됩니다 -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 조항 선택 -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">조 선택</label>
+                    <div class="border p-3 bg-white rounded" style="max-height: 300px; overflow-y: auto;">
+                        <form id="clauseFilterForm">
+                            <div id="clauseFilterContainer">
+                                <!-- 체크박스가 동적으로 추가됩니다 -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 룰 리스트 -->
+        <div id="rulesContainer" class="row gy-3">
+            <!-- 룰이 동적으로 추가됩니다 -->
+        </div>
+
+        <!-- 법률 선택 부분 -->
+        <div class="law-select-wrapper">
+            <div class="modern-select-wrapper">
+                <select id="lawSelect" name="lawSelect" class="modern-select">
+                    <option value="" disabled selected>법률 포맷 선택</option>
+                    <option value="GDPR">GDPR</option>
+                    <option value="CCPA">CCPA</option>
+                    <option value="개인정보보호법_통합">개인정보보호법 및 하위법</option>
+                </select>
+                <div class="select-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 다운로드 버튼 -->
+        <div class="download-button-wrapper">
+            <button id="submitBtn" type="button" class="download-button">
+                <i class="bi bi-cloud-download me-2"></i>
+                Download Selected Rules
+                <span class="button-hover-effect"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 소개 모달 -->
+    <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="introModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="introModalLabel">AWS Compliance Rules 안내</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="intro-section mb-4">
+                        <h6 class="fw-bold">🎯 서비스 소개</h6>
+                        <p>AWS 리소스의 규정 준수 상태를 점검하는 Prowler의 룰셋을 커스텀하고 생성할 수 있는 도구입니다.</p>
+                    </div>
+                    
+                    <div class="intro-section mb-4">
+                        <h6 class="fw-bold">📌 주요 기능</h6>
+                        <ul>
+                            <li>법률별 규정 준수 항목 확인</li>
+                            <li>AWS 서비스별 보안 규칙 관리</li>
+                            <li>위험도 및 MITRE ATT&CK 프레임워크 기반 분석</li>
+                            <li>맞춤형 규정 준수 룰셋 생성</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="intro-section mb-4">
+                        <h6 class="fw-bold">🔍 사용 방법</h6>
+                        <ol>
+                            <li><strong>법률 선택:</strong> 확인하고자 하는 법률을 선택합니다.</li>
+                            <li><strong>조항 선택:</strong> 선택한 법률의 세부 조항을 선택합니다.</li>
+                            <li><strong>룰 확인:</strong> 해당되는 Prowler AWS 보안 규칙을 확인합니다.</li>
+                            <li><strong>상세 정보:</strong> 각 룰의 상세 정보와 조치 방안을 확인합니다.</li>
+                            <li><strong>룰셋 생성:</strong> 선택한 룰들에 대한 JSON 형식의 룰셋 파일을 다운로드합니다.</li>
+                        </ol>
+                    </div>
+
+                    <div class="intro-section">
+                        <h6 class="fw-bold">💡 참고 사항</h6>
+                        <ul>
+                            <li>고정적으로 체크가 되어있는 룰은 <strong>Essential</strong>룰로 표시된 룰은 필수 적용 항목입니다.
+                                <ul>
+                                    <li>단, 다운로드 시 서비스 선택을 통해 특정 서비스의 Essential 룰도 제외할 수 있습니다.</li>
+                                </ul>
+                            </li>
+                            <li>위험도는 Critical, High, Medium, Low로 구분됩니다.</li>
+                            <li>MITRE ATT&CK에서 선수 공격이 필요없는 <strong>'Reconnaissance'</strong>, <strong>'Initial Access'</strong>과 체이닝시 매우 치명적인 <strong>'Privilege Escalation'</strong> 에 해당할 경우 Essential로 설정하였습니다.</li>
+                            <li>다운로드 시 서비스 선택 기능을 통해:
+                                <ul>
+                                    <li>특정 AWS 서비스에 대한 점검을 제외할 수 있습니다.</li>
+                                    <li>선택하지 않은 서비스의 룰은 Essential 여부와 관계없이 다운로드에서 제외됩니다.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="dontShowAgain" style="margin-top: 2px;">
+                        <label class="form-check-label" for="dontShowAgain" style="margin-right: 10px;">다시 보지 않기</label>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">시작하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 다운로드 버튼 -->
+    <button id="scrollToDownloadBtn" class="scroll-download-button">
+        <i class="bi bi-download"></i>
+    </button>
+    <!-- 도움말 버튼 -->
+    <button id="helpBtn" class="help-button" data-bs-toggle="modal" data-bs-target="#introModal">
+        <i class="bi bi-question-circle"></i>
+    </button>
+
+    <script src="libs/bootstrap.bundle.min.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/script.js" defer></script>
+</body>
+</html>

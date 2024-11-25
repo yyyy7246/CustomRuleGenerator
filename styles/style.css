@@ -1,0 +1,1233 @@
+/* 기본 설정 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 컨테이너 스타일 */
+#filterContainer,
+#lawFilterContainer,
+#clauseFilterContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 8px;
+    
+    /* 스크롤바 숨기기 */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+#filterContainer::-webkit-scrollbar,
+#lawFilterContainer::-webkit-scrollbar,
+#clauseFilterContainer::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+/* 필터 아이템 스타일 */
+.filter-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.filter-item:hover {
+    background-color: #f8f9fa;
+    border-color: #0056b3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 체크박스 스타일 */
+input[type="checkbox"],
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+    border: 2px solid #0056b3;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    position: relative;
+    flex-shrink: 0;
+}
+
+input[type="checkbox"]:checked,
+.form-check-input:checked {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+input[type="checkbox"]:checked::after,
+.form-check-input:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* 라벨 스타일 */
+.filter-item label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+    cursor: pointer;
+    flex: 1;
+    user-select: none;
+}
+
+/* 룰 아이템 스타일 */
+.rule-item {
+    padding: 16px 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.rule-item:hover {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+/* 룰 헤더 스타일 */
+.rule-header {
+    display: flex;
+    align-items: flex-start;  /* 상단 정렬로 변경 */
+    justify-content: flex-start;
+    padding-bottom: 12px;
+}
+
+.left-section {
+    display: flex;
+    align-items: flex-start;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+
+/* 룰 이름 스타일 */
+.rule-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+/* 태그 컨테이너 스타일 */
+.tag-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+
+/* MITRE ATT&CK 태그 스타일 */
+.mitre-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+/* 카테고리 태그 스타일 */
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+/* 카테고리 태그 스타일 */
+.category-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+    background-color: #6c757d;
+    transition: transform 0.2s ease;
+}
+
+.category-tag i {
+    font-size: 0.8rem;
+    margin-right: 5px;
+    opacity: 0.8;
+}
+
+.category-tag:hover {
+    transform: translateY(-1px);
+}
+/* 위험도 태그 기본 스타일 */
+.severity-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+}
+
+/* 위험도 레벨별 스타일 */
+.severity-critical {
+    background-color: #DC3545 !important;
+}
+
+.severity-high {
+    background-color: #FD7E14 !important;
+}
+
+.severity-medium {
+    background-color: #FFC107 !important;
+    color: #000 !important;
+}
+
+.severity-low {
+    background-color: #6C757D !important;
+}
+/* 아이콘 스타일 */
+.severity-tag ,
+.mitre-tag i {
+    font-size: 0.7rem;
+    margin-right: 4px;
+    opacity: 0.8;
+}
+
+/* 상세 정보 버튼 스타일 */
+.details-toggle-btn {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    color: #0056b3;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 15px;
+    gap: 6px;
+}
+
+.details-toggle-btn:hover {
+    background-color: #e9ecef;
+    border-color: #0056b3;
+}
+
+.details-toggle-btn.active {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}
+
+.details-icon {
+    margin-right: 6px;
+}
+
+.details-icon svg {
+    transition: transform 0.2s ease;
+}
+
+
+
+
+
+/* 제출 버튼 스타일 */
+#submitBtn {
+    display: block;
+    width: 400px;
+    margin: 20px auto;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #0056b3;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#submitBtn:hover {
+    background-color: #004494;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 도움말 버튼 스타일 */
+.help-button {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+
+.bi-question-circle {
+    font-size: 24px;
+}
+
+/* 모달 스타일 */
+.intro-section {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.intro-section h6 {
+    color: #0056b3;
+    margin-bottom: 10px;
+}
+
+.intro-section ul,
+.intro-section ol {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.intro-section li {
+    margin-bottom: 8px;
+}
+
+/* 기타 유틸리티 클래스 */
+.text-primary {
+    color: #0056b3;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* 체크박스 필수 표시 */
+.checkbox-area {
+    position: relative;
+    width: 24px;
+    height: 24px;
+}
+
+.checkbox-area.essential::after {
+    content: '필수';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #dc3545;
+    white-space: nowrap;
+}
+
+/* 룰 아이템 스타일 */
+.rule-item {
+    padding: 16px 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+
+/* 체크박스 래퍼 스타일 */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    margin-top: 8px;  /* 상단 여백 추가 */
+    align-self: flex-start;  /* 상단 정렬 */
+}
+
+
+/* 룰 이름 스타일 */
+.rule-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;  /* 마진 제거 */
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+/* 태그 컨테이너 스타일 */
+.tag-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+
+/* 체크박스 스타일 */
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0 12px 0 0;
+    cursor: pointer;
+    border: 2px solid #0056b3;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.no-wrap-ip {
+    display: inline-block;
+    white-space: nowrap !important;
+    font-family: monospace;
+    background-color: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #d63384;
+    margin: 0 2px;
+    font-size: 0.95em;
+}
+
+
+.no-wrap-ip {
+    white-space: nowrap !important;
+    display: inline-block; /* 텍스트 줄바꿈 방지 */
+}
+
+/* 상세 정보 영역 */
+.rule-details {
+    margin-top: 15px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #0056b3;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.rule-details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.rule-details th {
+    width: 140px;
+    padding: 12px;
+    text-align: left;
+    color: #495057;
+    font-weight: 600;
+    background-color: rgba(0,0,0,0.02);
+}
+
+
+/* 부모 요소의 word-break 설정 */
+.rule-details td {
+    word-break: break-word;
+    white-space: normal;
+}
+
+
+/* IP 주소 스타일 */
+.no-wrap-ip {
+    display: inline-block;
+    white-space: nowrap !important;
+    font-family: monospace;
+    background-color: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #d63384;
+    margin: 0 2px;
+    font-size: 0.95em;
+}
+
+/* 액션 스텝 스타일 */
+.action-step {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+/* 전체 레이아웃 조정 */
+.container {
+    margin-left: 220px !important; /* 사이드바 너비 + 여백 */
+    width: calc(100% - 220px) !important;
+}
+
+/* 제목 중앙 정렬 수정 */
+.container h1 {
+    text-align: center;
+    margin-left: -220px; /* 사이드바 너비만큼 왼쪽 마진 추가 */
+    width: calc(100% + 220px); /* 전체 너비 조정 */
+    margin-bottom: 30px;
+    color: #0056b3;
+}
+
+/* 서비스 사이드바 스타일 */
+.service-sidebar {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 180px; /* 너비 축소 */
+    max-height: 75vh;
+    background: white;
+    border-radius: 12px;
+    overflow-y: auto;
+    padding: 16px 12px; /* 패딩 축소 */
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Webkit 브라우저의 스크롤바 숨기기 */
+.service-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+.sidebar-header {
+    padding: 0 20px 15px;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.service-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.service-item {
+    margin: 2px 0;
+}
+
+.service-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    color: #4a5568;
+    text-decoration: none;
+    font-size: 0.85rem; /* 서비스 이름 폰트 크기 축소 */
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.service-link:last-child {
+    border-bottom: none;
+}
+
+.service-link span {
+    margin-right: 8px; /* 서비스 이름과 숫자 사이 간격 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 긴 텍스트는 ...으로 표시 */
+}
+
+/* 숫자 표시 스타일 수정 */
+.service-count {
+    font-size: 0.85rem;
+    color: #718096;
+    font-weight: 500;
+    background: #f5f6f7;
+    padding: 2px 8px;
+    border-radius: 12px;
+    min-width: 28px;
+    text-align: center;
+}
+
+
+.service-link:hover {
+    background: #f7fafc;
+    color: #0056b3;
+    transform: translateX(4px);
+}
+
+.service-link.active {
+    background: #ebf4ff;
+    color: #0056b3;
+    font-weight: 600;
+    border-bottom: 1px solid #ebf4ff; /* 활성화 시 구분선 색상 변경 */
+}
+
+/* 서비스 카운트 스타일 */
+.service-link::after {
+    content: attr(data-count);
+    font-size: 0.75rem; /* 숫자 크기 축소 */
+    font-weight: 500;
+    color: #718096;
+    background: #edf2f7;
+    padding: 2px 6px; /* 패딩 축소 */
+    border-radius: 10px;
+    min-width: 24px; /* 최소 너비 축소 */
+    text-align: center;
+    margin-left: 8px; /* 왼쪽 여백 추가 */
+}
+
+.service-link:hover::after,
+.service-link.active::after {
+    background: #0056b3;
+    color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .service-sidebar {
+        width: 180px;
+    }
+    
+    .container {
+        margin-left: 180px !important;
+        width: calc(100% - 180px) !important;
+    }
+    
+    .container h1 {
+        margin-left: -180px;
+        width: calc(100% + 180px);
+        font-size: 1.8rem;
+    }
+}
+
+/* 룰 하이라이트 효과 */
+.rule-item.highlight {
+    border-color: #0056b3;
+    box-shadow: 0 0 10px rgba(0, 86, 179, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* 서비스 섹션 스타일 수정 */
+.service-section {
+    scroll-margin-top: 120px; /* 스크롤 시 헤더 높이만큼 여백 추가 */
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* 사이드바 활성 링크 스타일 강화 */
+.service-link.active {
+    background: #0056b3;
+    color: white;
+    border-left: 4px solid #003d7a;
+}
+
+.scroll-download-button {
+    position: fixed;
+    right: 90px; /* 도움말 버튼 왼쪽으로 이동 */
+    bottom: 30px; /* 도움말 버튼과 같은 높이 */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.help-button:hover,
+.scroll-download-button:hover {
+    background-color: #003d82;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.help-button i,
+.scroll-download-button i {
+    font-size: 1.5rem;
+}
+
+/* 기존 도움말 버튼 스타일 수정 */
+.help-button {
+    bottom: 30px; /* 다운로드 버튼과 겹치지 않도록 조정 */
+}
+
+.sidebar-header {
+    padding: 0 8px 16px;
+    border-bottom: 1px solid #edf2f7;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-header:hover h3 {
+    color: #0056b3;
+}
+
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .law-select-container,
+    #submitBtn {
+        width: 90%;
+    }
+    
+    #lawFilterContainer,
+    #clauseFilterContainer {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-item {
+        padding: 10px;
+    }
+    
+    .rule-header {
+        flex-direction: column;
+    }
+    
+    .rule-name {
+        margin-top: 10px;
+    }
+    
+    .tag-container {
+        flex-wrap: wrap;
+    }
+    
+    .severity-tag,
+    .mitre-tag,
+    .category-tag {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+}
+
+/* 제목 스타일 */
+.main-title {
+    text-align: center;
+    padding: 40px 0;
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    position: relative;
+}
+
+.title-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.highlight {
+    color: #0056b3;
+    position: relative;
+}
+
+.title-underline {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #0056b3, #00a0ff);
+    border-radius: 2px;
+}
+
+/* 법률 선택 컨테이너 스타일 */
+.law-select-wrapper {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* 법률 선택 드롭다운 컨테이너 */
+.law-select-container {
+    position: relative;
+    width: 400px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 102, 255, 0.1);
+}
+
+
+
+
+
+.custom-select {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1rem;
+    color: #2d3748;
+    background-color: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-select:hover {
+    border-color: #0056b3;
+}
+
+.custom-select:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #0056b3;
+}
+
+/* 다운로드 버튼 스타일 */
+.download-button-wrapper {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.download-button {
+    position: relative;
+    padding: 16px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(45deg, #0056b3, #00a0ff);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 86, 179, 0.2);
+}
+
+.download-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 86, 179, 0.3);
+}
+
+.button-hover-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.download-button:hover .button-hover-effect {
+    transform: translateX(100%);
+}
+
+
+
+
+
+
+.modern-select-wrapper {
+    position: relative;
+    max-width: 400px;
+    margin: 30px auto;
+    background: #ffffff;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.modern-select {
+    width: 100%;
+    padding: 18px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2d3748;
+    background: transparent;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.modern-select:hover {
+    border-color: #0066ff;
+    box-shadow: 0 8px 15px rgba(0, 102, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.modern-select:focus {
+    outline: none;
+    border-color: #0066ff;
+    box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.select-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #0066ff;
+    transition: transform 0.3s ease;
+}
+
+.modern-select:focus + .select-icon {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* 옵션 스타일링 */
+.modern-select option {
+    padding: 16px;
+    font-size: 1rem;
+    background: white;
+    color: #2d3748;
+}
+
+/* 호버 시 배경 효과 */
+.modern-select-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #0066ff, #00c6ff);
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.modern-select-wrapper:hover::before {
+    opacity: 0.1;
+}
+
+/* 선택된 옵션 스타일 */
+.modern-select option:checked {
+    background: linear-gradient(135deg, #0066ff, #00c6ff);
+    color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .modern-select-wrapper {
+        max-width: 90%;
+    }
+    
+    .modern-select {
+        padding: 16px 20px;
+        font-size: 0.95rem;
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2rem;
+        padding: 30px 0;
+    }
+    
+    .law-select-wrapper {
+        max-width: 90%;
+    }
+    
+    .download-button {
+        width: 90%;
+        max-width: 400px;
+    }
+}
+
+.law-select-container {
+    position: relative;
+    width: 400px;
+    margin: 30px auto;
+}
+
+#lawSelect {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 16px;
+    color: #333;
+    background-color: white;
+    border: 2px solid #e1e1e1;
+    border-radius: 15px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 화살표 아이콘 */
+.law-select-container::after {
+    content: '';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #0066ff;
+    border-bottom: 2px solid #0066ff;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+/* 호버 효과 */
+#lawSelect:hover {
+    border-color: #0066ff;
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+/* 포커스 효과 */
+#lawSelect:focus {
+    outline: none;
+    border-color: #0066ff;
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
+}
+
+/* 옵션 스타일링 */
+#lawSelect option {
+    padding: 15px;
+    font-size: 16px;
+    background: white;
+    color: #333;
+}
+
+/* 선택된 옵션 */
+#lawSelect option:checked {
+    background: #f0f7ff;
+    color: #0066ff;
+}
+
+.form-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    display: inline-block;
+    position: relative;
+}
+
+.form-label::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #4a90e2;
+    border-radius: 2px;
+}
+
+/* IP 주소 스타일 */
+.ip-address {
+    font-family: monospace;
+    white-space: nowrap;
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* 조치방안 컨테이너 스타일 */
+.action-steps {
+    counter-reset: step;
+    padding-left: 0;
+}
+
+.action-steps li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 8px;
+    list-style-type: none;
+}
+
+.action-steps li::before {
+    counter-increment: step;
+    content: counter(step) ".";
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+/* 룰 헤더 컨테이너 수정 */
+.rule-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+/* 왼쪽 섹션 수정 */
+.d-flex.align-items-start.flex-grow-1 {
+    min-width: 0; /* 컨텐츠가 넘치지 않도록 설정 */
+}
+
+/* 룰 정보 영역 수정 */
+.rule-info {
+    min-width: 0; /* 컨텐츠가 넘치지 않도록 설정 */
+}
+
+/* 룰 이름 라인 수정 */
+.d-flex.align-items-center.justify-content-between.mb-2 {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* 룰 이름 수정 */
+.rule-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1.5;
+    min-width: 0;
+    flex: 1;
+}
+
+/* 태그 컨테이너 수정 */
+.tag-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0; /* 태그 영역은 축소되지 않도록 설정 */
+}
+
+/* 상세정보 버튼 수정 */
+.details-toggle-btn {
+    flex-shrink: 0; /* 버튼은 축소되지 않도록 설정 */
+    white-space: nowrap;
+}
+
+/* 룰 헤더 컨테이너 */
+.rule-header {
+display: flex;
+align-items: flex-start;
+width: 100%;
+gap: 12px;
+}
+
+/* 룰 이름과 버튼을 감싸는 컨테이너 */
+.title-button-container {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+width: 100%;
+gap: 16px;
+}
+
+/* 룰 이름 */
+.rule-name {
+font-size: 1.1rem;
+font-weight: 600;
+color: #2c3e50;
+margin: 0;
+line-height: 1.5;
+word-break: break-word;
+flex: 1;
+min-width: 0;
+}
+
+/* 상세정보 버튼 */
+.details-toggle-btn {
+flex-shrink: 0;
+white-space: nowrap;
+align-self: flex-start;
+margin-top: 4px;
+}
+
+/* 태그 컨테이너 */
+.tag-container {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-top: 12px;
+}
