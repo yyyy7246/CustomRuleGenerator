@@ -2,6 +2,7 @@ let allRules = [];
 let currentLaws = new Set();
 let currentClauses = new Set();
 let selectedChecks = new Set();
+let currentSeverities = new Set();
 
 // 고유 ID 생성을 위한 카운터
 let idCounter = 0;
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // data.js에서 정의된 allRulesData를 사용
     allRules = allRulesData;
     setupLawFilter();
+    setupSeverityFilter(); 
     renderRules(allRules);
     groupRulesByService();
     
@@ -106,6 +108,69 @@ function setupLawFilter() {
         
         lawFilterContainer.appendChild(wrapper);
     });
+}
+
+function setupSeverityFilter() {
+    const severityFilterContainer = document.getElementById("severityFilterContainer");
+    severityFilterContainer.innerHTML = "";
+
+    const severities = ["critical", "high", "medium", "low"];
+    const severitySection = document.createElement("div");
+    // justify-content-around로 수정하여 균등한 간격 배치
+    severitySection.className = "d-flex justify-content-around align-items-center w-100 px-4";
+
+    const severityColors = {
+        'critical': '#dc3545',
+        'high': '#fd7e14',
+        'medium': '#ffc107',
+        'low': '#6c757d'
+    };
+
+    severities.forEach(severity => {
+        const uniqueId = createSafeId('severity', severity);
+        const wrapper = document.createElement("div");
+        // flex-grow-1과 mx-4를 추가하여 간격 조정
+        wrapper.className = "d-flex align-items-center flex-grow-1 mx-4";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = uniqueId;
+        checkbox.className = "form-check-input me-3";
+        
+        // 체크박스 테두리 스타일 추가
+        checkbox.style.borderColor = '#0d6efd';
+        checkbox.style.width = '20px';
+        checkbox.style.height = '20px';
+
+        const label = document.createElement("label");
+        label.htmlFor = uniqueId;
+        label.className = "severity-tag border rounded px-4 py-2";
+        label.style.color = severityColors[severity];
+        label.style.borderColor = severityColors[severity];
+        label.textContent = severity.charAt(0).toUpperCase() + severity.slice(1);
+        // 라벨 커서 스타일 추가
+        label.style.cursor = 'pointer';
+
+        // 클릭 이벤트 처리
+        checkbox.addEventListener("change", (e) => {
+            if (checkbox.checked) {
+                currentSeverities.add(severity);
+                label.style.backgroundColor = severityColors[severity];
+                label.style.color = severity === 'medium' ? '#000' : '#fff';
+            } else {
+                currentSeverities.delete(severity);
+                label.style.backgroundColor = '';
+                label.style.color = severityColors[severity];
+            }
+            filterAndRenderRules();
+        });
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        severitySection.appendChild(wrapper);
+    });
+
+    severityFilterContainer.appendChild(severitySection);
 }
 
 // 조항 필터 업데이트
@@ -189,7 +254,7 @@ function updateClauses() {
 // 룰 필터링
 function filterAndRenderRules() {
     const filteredRules = allRules.filter(rule => {
-        if (currentLaws.size === 0 && currentClauses.size === 0) {
+        if (currentLaws.size === 0 && currentClauses.size === 0 && currentSeverities.size === 0) {
             return true;
         }
         
@@ -203,12 +268,15 @@ function filterAndRenderRules() {
                 return rule[law] && rule[law].toString().includes(clause);
             });
         
-        // 필터링된 룰이 Essential이면 selectedChecks에 추가
-        if (matchesLaws && matchesClauses && rule["Primary"] === "Essential") {
+        const matchesSeverity = currentSeverities.size === 0 || 
+            (rule["위험도"] && currentSeverities.has(rule["위험도"].toLowerCase()));
+
+        if (matchesLaws && matchesClauses && matchesSeverity && 
+            rule["Primary"] === "Essential") {
             selectedChecks.add(rule["Checks"]);
         }
         
-        return matchesLaws && matchesClauses;
+        return matchesLaws && matchesClauses && matchesSeverity;
     });
     
     renderRules(filteredRules);
