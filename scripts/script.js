@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     allRules = allRulesData;
     setupLawFilter();
     setupSeverityFilter(); 
+    setupResetButton();
     renderRules(allRules);
     groupRulesByService();
     
@@ -109,7 +110,6 @@ function setupLawFilter() {
         lawFilterContainer.appendChild(wrapper);
     });
 }
-
 function setupSeverityFilter() {
     const severityFilterContainer = document.getElementById("severityFilterContainer");
     severityFilterContainer.innerHTML = "";
@@ -172,6 +172,39 @@ function setupSeverityFilter() {
 
     severityFilterContainer.appendChild(severitySection);
 }
+
+function setupResetButton() {
+    document.getElementById('resetFilters').addEventListener('click', () => {
+
+        // 위험도 필터 다시 생성
+        setupSeverityFilter();
+        
+        // 조항 체크박스 초기화
+        document.querySelectorAll('#clauseFilterContainer input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // 법률 체크박스 초기화
+        document.querySelectorAll('#lawFilterContainer input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Set 초기화
+        currentSeverities.clear();
+        currentClauses.clear();
+        currentLaws.clear();
+        
+        // 조항 컨테이너 초기화
+        const clauseFilterContainer = document.getElementById("clauseFilterContainer");
+        if (clauseFilterContainer) {
+            clauseFilterContainer.innerHTML = "";
+        }
+        
+        // 필터 적용하여 화면 갱신
+        filterAndRenderRules();
+    });
+}
+
 
 // 조항 필터 업데이트
 function updateClauses() {
